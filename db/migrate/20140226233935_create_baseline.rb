@@ -58,8 +58,8 @@ class CreateBaseline < ActiveRecord::Migration
       t.string   "organization", limit: 255
     end
 
-    add_index "github_hooks", ["organization", "event"], name: "index_github_hooks_on_organization_and_event", unique: true, using: :btree
-    add_index "github_hooks", ["stack_id", "event"], name: "index_github_hooks_on_stack_id_and_event", unique: true, using: :btree
+    add_index "github_hooks", ["organization", "event"], name: "index_github_hooks_on_organization_and_event", unique: true, using: :btree, length: { 'organization' => 10, 'event' => 10 }
+    add_index "github_hooks", ["stack_id", "event"], name: "index_github_hooks_on_stack_id_and_event", unique: true, using: :btree, length: { 'event' => 10 }
 
     create_table "hooks", force: :cascade do |t|
       t.integer  "stack_id",     limit: 4
@@ -109,7 +109,7 @@ class CreateBaseline < ActiveRecord::Migration
       t.integer  "lock_author_id",           limit: 4
     end
 
-    add_index "stacks", ["repo_owner", "repo_name", "environment"], name: "stack_unicity", unique: true, using: :btree
+    add_index "stacks", ["repo_owner", "repo_name", "environment"], name: "stack_unicity", unique: true, using: :btree, length: { 'repo_owner' => 10, 'repo_name' => 10, 'environment' => 10 }
 
     create_table "statuses", force: :cascade do |t|
       t.string   "state",       limit: 255
@@ -155,7 +155,7 @@ class CreateBaseline < ActiveRecord::Migration
       t.datetime "updated_at",               null: false
     end
 
-    add_index "teams", ["organization", "slug"], name: "index_teams_on_organization_and_slug", unique: true, using: :btree
+    add_index "teams", ["organization", "slug"], name: "index_teams_on_organization_and_slug", unique: true, using: :btree, length: { 'organization' => 10, 'slug' => 10 }
 
     create_table "users", force: :cascade do |t|
       t.integer  "github_id",  limit: 4
